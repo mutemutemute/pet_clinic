@@ -1,13 +1,17 @@
-
 import './App.css'
-
+import { BrowserRouter, Routes, Route } from 'react-router'
+import Appointments from './components/Appointments'
+import SignupForm from './components/SignupForm'
 function App() {
   
 
   return (
-    <>
-      <h1>Hello</h1>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Appointments />} />
+        <Route path="/signup" element={<SignupForm />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
