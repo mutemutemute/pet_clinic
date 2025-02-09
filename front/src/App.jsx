@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router'
 import Appointments from './components/Appointments'
 import SignupForm from './components/SignupForm'
 import LoginForm from './components/LoginForm'
+import AddAppointment from './components/AddAppointment'
+import NotFound from './components/NotFound'
 function App() {
   
 
@@ -12,6 +14,8 @@ function App() {
         <Route path="/appointments" element={<Appointments />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/" element={<LoginForm />} />
+        <Route path="/add-appointment" element={<AddAppointment />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   )

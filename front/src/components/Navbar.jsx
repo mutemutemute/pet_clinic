@@ -8,9 +8,8 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, setError } = useContext(UserContext);
 
   const logout = async () => {
     try {
@@ -35,24 +34,24 @@ const Navbar = () => {
       }
     }
   };
+
   return (
     <div className="flex justify-between items-center p-4 bg-[#431592] text-white">
-      <h1 className="flex-1 text-center text-3xl">Pets Medicare</h1>
-      
-    
-    {user && (
+      <h1 className="flex-1 text-center text-xl lg:text-3xl">Pets Medicare</h1>
+
+      {user && (
         <div className="relative" onBlur={() => setIsDropdownOpen(false)}>
           <div
-            className="flex items-center justify-center w-10 h-10"
+            className="flex items-center justify-center w-10 h-10 cursor-pointer"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
-          <HiOutlineLogout className="ml-auto text-3xl" />
+            <HiOutlineLogout className="text-3xl" />
           </div>
 
           {isDropdownOpen && (
-            <div className="absolute right-0 top-8 lg:left-12 lg:top-0 mt-2 w-32 bg-white shadow-lg rounded-lg overflow-hidden">
+            <div className="absolute right-0 top-12 w-32 bg-white shadow-lg rounded-lg overflow-hidden">
               <button
-                className="flex items-center px-4 py-2 w-full text-left text-gray-700 hover:bg-gray-200 "
+                className="flex items-center px-4 py-2 w-full text-left text-gray-700 hover:bg-gray-200"
                 onClick={logout}
               >
                 Logout
@@ -61,7 +60,7 @@ const Navbar = () => {
           )}
         </div>
       )}
-      </div>
+    </div>
   );
 };
 
