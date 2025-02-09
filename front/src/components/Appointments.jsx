@@ -1,7 +1,8 @@
+import Navbar from "./Navbar";
 const Appointments = () => {
     return (
         <>
-            <h1>Appointments</h1>
+            <Navbar />
         </>
     )
 }
