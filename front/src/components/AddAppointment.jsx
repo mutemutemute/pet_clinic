@@ -34,10 +34,10 @@ const AddAppointment = () => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-4">
+        <div className="mb-4 flex justify-center items-center gap-3">
           <label
             htmlFor="pet_name"
-            className="block text-sm font-medium text-gray-300"
+            className="text-sm "
           >
             Pet Name
           </label>
@@ -47,17 +47,17 @@ const AddAppointment = () => {
             })}
             type="text"
             placeholder="Pet's Name"
-            className="input input-bordered mt-1 p-2  rounded-md w-full"
+            className="input input-bordered mt-1 p-2  rounded-md w-full flex-1"
           />
           {errors.pet_name && (
             <p className="text-red-500 text-sm">{errors.pet_name.message}</p>
           )}
         </div>
 
-        <div className="mb-4">
+        <div className="mb-4 flex justify-center items-center gap-2">
           <label
             htmlFor="pet_owner"
-            className="block text-sm font-medium text-gray-300"
+            className="text-sm "
           >
             Pet Owner
           </label>
@@ -67,17 +67,19 @@ const AddAppointment = () => {
             })}
             type="text"
             placeholder="Owner's Name"
-            className="input input-bordered mt-1 p-2  rounded-md w-full"
+            className="input input-bordered mt-1 p-2  rounded-md w-full flex-1"
           />
           {errors.pet_owner && (
             <p className="text-red-500 text-sm">{errors.pet_owner.message}</p>
           )}
         </div>
 
-        <div className="mb-4">
+
+<div className="flex flex-col md:grid grid-cols-2 ">
+        <div className="mb-4 flex justify-center items-center ml-9 md:mx-9 gap-2">
           <label
             htmlFor="appointment_date"
-            className="block text-sm font-medium text-gray-300 "
+            className="block text-sm"
           >
             Date
           </label>
@@ -95,10 +97,10 @@ const AddAppointment = () => {
           )}
         </div>
 
-        <div className="mb-4">
+        <div className="mb-4 flex justify-center items-center gap-2 ml-9 md:ml-16 ">
           <label
             htmlFor="appointment_time"
-            className="block text-sm font-medium text-gray-300"
+            className="text-sm"
           >
             Time
           </label>
@@ -116,11 +118,12 @@ const AddAppointment = () => {
             </p>
           )}
         </div>
+        </div>
 
-        <div className="mb-4">
+        <div className="mb-4 flex justify-center gap-2 ">
           <label
             htmlFor="notes"
-            className="block text-sm font-medium text-gray-300"
+            className="block text-sm mt-2"
           >
             Apt. Notes
           </label>
@@ -129,7 +132,7 @@ const AddAppointment = () => {
               required: "Appointment notes are required",
             })}
             placeholder="Appointment Notes"
-            className="input input-bordered mt-1 p-2 rounded-md w-full h-32"
+            className="input input-bordered mt-1 p-2 rounded-md w-full h-32 flex-1"
           />
           {errors.notes && (
             <p className="text-red-500 text-sm">{errors.notes.message}</p>

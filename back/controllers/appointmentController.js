@@ -32,11 +32,11 @@ exports.getAllAppointments = async (req, res, next) => {
     const offset = (page - 1) * limit;
 
     const appointments = await getAppointments(limit, offset);
-    const appointmentsWithoutId = appointments.map(({ id, ...rest }) => rest);
+    // const appointmentsWithoutId = appointments.map(({ id, ...rest }) => rest);
 
     res.status(200).json({
       status: "success",
-      data: appointmentsWithoutId,
+      data: appointments,
     });
   } catch (error) {
     next(error);
