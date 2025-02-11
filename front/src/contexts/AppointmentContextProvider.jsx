@@ -1,34 +1,48 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AppointmentContext from "./AppointmentContext";
-import { useEffect } from "react";
-import axios from "axios";
-const API_URL = import.meta.env.VITE_API_URL;
+import fetchAppointments from "../helpers/fetchAppointments";
 
 function AppointmentContextProvider({ children }) {
-    const [appointments, setAppointments] = useState([]);
-    const [error, setError] = useState(null);
-    const [showForm, setShowForm] = useState(false); 
-    
-    
-    const fetchAppointments = async () => {
-      try {
-        const response = await axios.get(`${API_URL}/appointments`);
-        setAppointments(response.data);
-      } catch (error) {
-        console.error("Error fetching appointments:", error);
+  const [appointments, setAppointments] = useState([]);
+  const [error, setError] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [sortColumn, setSortColumn] = useState("pet_name");
+  const [sortOrder, setSortOrder] = useState("ASC");
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchAppointments(searchTerm, sortColumn, sortOrder);
+      if (data.error) {
+        setError(data.error);
+      } else {
+        setAppointments(data);
       }
     };
-  
-    useEffect(() => {
-      fetchAppointments();
-    }, []);
-   
 
-    return (
-        <AppointmentContext.Provider value={{ appointments, setAppointments, error, setError,showForm, setShowForm }}>
-            {children}
-        </AppointmentContext.Provider>
-    );
+    fetchData();
+  }, [sortColumn, sortOrder, searchTerm]); 
+
+  return (
+    <AppointmentContext.Provider
+      value={{
+        appointments,
+        setAppointments,
+        error,
+        setError,
+        showForm,
+        setShowForm,
+        sortColumn,
+        setSortColumn,
+        sortOrder,
+        setSortOrder,
+        searchTerm,
+        setSearchTerm,
+      }}
+    >
+      {children}
+    </AppointmentContext.Provider>
+  );
 }
 
 export default AppointmentContextProvider;
