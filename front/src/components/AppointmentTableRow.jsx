@@ -1,7 +1,8 @@
+import { Link } from "react-router";
 const AppointmentTableRow = ({ appointment }) => {
   const { id, pet_name, pet_owner, appointment_date, appointment_time, notes } =
     appointment;
-
+  
     const date = new Date(appointment_date)
     .toLocaleDateString("en-US", {
       month: "short", 
@@ -30,6 +31,7 @@ const AppointmentTableRow = ({ appointment }) => {
           {date} {time}
         </p>
       </div>
+      <Link to={`edit/${id}`}>Edit</Link>
     </div>
   );
 };

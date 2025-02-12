@@ -5,6 +5,7 @@ const {
   deleteAppointment,
   filterAppointments,
   searchAppointments,
+  getAppointmentById
 } = require("../models/appointmentModel");
 
 exports.createNewAppointment = async (req, res, next) => {
@@ -106,6 +107,19 @@ exports.filterAllAppointmentsByPetName = async (req, res, next) => {
     res.status(200).json({
       status: "success",
       data: appointments,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getThisAppointment = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const appointment = await getAppointmentById(id);
+    res.status(200).json({
+      status: "success",
+      data: appointment,
     });
   } catch (error) {
     next(error);

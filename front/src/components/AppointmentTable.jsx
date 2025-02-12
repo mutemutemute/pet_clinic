@@ -5,11 +5,14 @@ import AppointmentTableRow from "./AppointmentTableRow";
 const AppointmentTable = () => {
   const { appointments } = useContext(AppointmentContext);
 
+  
+  
+
   return (
     <div className="flex flex-col justify-center items-center w-full">
       <div className="h-100 overflow-y-auto w-full">
-        {appointments.data ? (
-          appointments.data.map((appointment) => (
+        {appointments ? (
+          appointments.map((appointment) => (
             <AppointmentTableRow
               key={appointment.id}
               appointment={appointment}

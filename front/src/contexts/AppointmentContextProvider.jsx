@@ -16,7 +16,7 @@ function AppointmentContextProvider({ children }) {
       if (data.error) {
         setError(data.error);
       } else {
-        setAppointments(data);
+        setAppointments(data.data);
       }
     };
 

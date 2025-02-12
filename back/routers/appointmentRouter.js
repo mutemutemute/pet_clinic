@@ -6,6 +6,7 @@ const {
   deleteThisAppointment,
   filterAllAppointments,
   filterAllAppointmentsByPetName,
+  getThisAppointment,
 } = require("../controllers/appointmentController");
 const validate = require("../validators/validate");
 const router = express.Router();
@@ -26,6 +27,7 @@ router
   .get(validatePagination, validate, filterAllAppointmentsByPetName);
 router
   .route("/:id")
+  .get(validateAppointmentId, validate, getThisAppointment)
   .patch(validateAppointmentId, validate, updateThisAppointment)
   .delete(validateAppointmentId, validate, deleteThisAppointment);
 
