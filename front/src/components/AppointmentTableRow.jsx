@@ -1,11 +1,18 @@
 import { Link } from "react-router";
+import { useContext } from "react";
+import AppointmentContext from "../contexts/AppointmentContext";
+import axios from "axios";
+
+const API_URL = import.meta.env.VITE_API_URL;
+
 const AppointmentTableRow = ({ appointment }) => {
   const { id, pet_name, pet_owner, appointment_date, appointment_time, notes } =
     appointment;
-  
-    const date = new Date(appointment_date)
+  const { setError, setAppointments } = useContext(AppointmentContext);
+
+  const date = new Date(appointment_date)
     .toLocaleDateString("en-US", {
-      month: "short", 
+      month: "short",
       day: "2-digit",
     })
     .replace(" ", "-");
@@ -19,19 +26,45 @@ const AppointmentTableRow = ({ appointment }) => {
     })
     .toLowerCase();
 
+  const handleDelete = async () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this invoice?"
+    );
+
+    if (confirmed) {
+      setAppointments((prev) =>
+        prev.filter((appointment) => appointment.id !== id)
+      );
+    }
+
+    try {
+      await axios.delete(`${API_URL}/appointments/${id}`, {
+        withCredentials: true,
+      });
+      window.alert("Appointment deleted successfully!");
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   return (
-    <div className="flex border-b border-gray-300 p-4 w-full justify-between">
-      <div className="flex flex-col">
-        <p>{pet_name}</p>
-        <p>Owner: {pet_owner}</p>
-        <p>{notes}</p>
+    <div className="grid grid-cols-3 border-b border-gray-300 p-4 w-full">
+      <div className="flex flex-col items-start space-y-1">
+        <Link to={`edit/${id}`}>Edit</Link>
+        <button onClick={handleDelete}>Delete</button>
       </div>
-      <div>
+
+      <div className="text-center text-sm">
+        <p className="text-[#431592]">{pet_name}</p>
+        <p className="text-gray-600">Owner: {pet_owner}</p>
+        <p className="text-gray-500">{notes}</p>
+      </div>
+
+      <div className="text-right">
         <p>
           {date} {time}
         </p>
       </div>
-      <Link to={`edit/${id}`}>Edit</Link>
     </div>
   );
 };

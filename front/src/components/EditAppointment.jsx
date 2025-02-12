@@ -165,7 +165,7 @@ const EditAppointment = () => {
           type="submit"
           className="btn  px-4 py-2 bg-[#431592] text-white"
         >
-          Add Appointment
+          Edit Appointment
         </button>
       </div>
       {error && <p className="text-red-500">{error}</p>}

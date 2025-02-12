@@ -17,6 +17,7 @@ function AppointmentContextProvider({ children }) {
         setError(data.error);
       } else {
         setAppointments(data.data);
+        console.log(data.data);
       }
     };
 
