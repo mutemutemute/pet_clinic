@@ -43,7 +43,7 @@ const SortOptions = () => {
             <button
               onClick={() => handleSortChange("appointment_date")}
               className={`w-full text-left px-4 py-2 hover:bg-gray-100 ${
-                sortColumn === "date" ? "bg-gray-300" : ""
+                sortColumn === "appointment_date" ? "bg-gray-300" : ""
               }`}
             >
               Date
@@ -51,7 +51,7 @@ const SortOptions = () => {
             <button
               onClick={() => handleSortChange("pet_owner")}
               className={`w-full text-left px-4 py-2 hover:bg-gray-100 ${
-                sortColumn === "owner" ? "bg-gray-300" : ""
+                sortColumn === "pet_owner" ? "bg-gray-300" : ""
               }`}
             >
               Owner
