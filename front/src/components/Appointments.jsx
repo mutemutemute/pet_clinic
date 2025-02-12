@@ -17,7 +17,7 @@ const Appointments = () => {
       <div className="flex flex-col items-center justify-center mt-6">
         <button
           onClick={() => setShowForm((prev) => !prev)}
-          className="bg-[#431592] text-white flex justify-center items-center px-6 py-3 rounded-md shadow-md w-[17rem] md:w-[45rem] lg:w-[60rem]"
+          className="bg-[#431592] text-white flex justify-center items-center px-6 py-1.5 rounded-md shadow-md w-[17rem] md:w-[45rem] lg:w-[60rem]"
         >
           <FaPlus /> Add Appointment
         </button>
@@ -27,7 +27,7 @@ const Appointments = () => {
             <AddAppointment />
           </div>
         )}
-        <div className="flex items-center justify-center mt-5 gap-2 w-[17rem] md:w-[45rem] lg:w-[60rem]">
+        <div className="flex items-center justify-center mt-5 w-[17rem] md:w-[45rem] lg:w-[60rem]">
           <SearchBar />
           <SortOptions />
         </div>

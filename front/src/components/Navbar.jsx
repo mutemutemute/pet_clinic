@@ -36,7 +36,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex justify-between items-center p-4 bg-[#431592] text-white">
+    <div className="flex justify-between items-center p-1 bg-[#431592] text-white">
       <h1 className="flex-1 text-center text-xl lg:text-3xl">Pets Medicare</h1>
 
       {user && (

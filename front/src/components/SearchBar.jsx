@@ -23,7 +23,7 @@ const SearchBar = () => {
         placeholder="Search appointments..."
         value={searchTerm}
         onChange={handleSearch}
-        className="border border-gray-300 rounded-md p-2"
+        className="border-0 border-y border-l border-gray-300 rounded-l p-[0.43rem]"
       />
     </div>
   );
