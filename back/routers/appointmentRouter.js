@@ -7,6 +7,7 @@ const {
   filterAllAppointments,
   filterAllAppointmentsByPetName,
   getThisAppointment,
+  getAllAppointmentsByUserId,
 } = require("../controllers/appointmentController");
 const validate = require("../validators/validate");
 const router = express.Router();
@@ -14,7 +15,8 @@ const validatePagination = require("../validators/pagination");
 const validateNewAppointment = require("../validators/newappointment");
 const validateAppointmentId = require("../validators/appointmentid");
 const validateFilter = require("../validators/filter");
-const {protect} = require("../controllers/authController");
+const { protect } = require("../controllers/authController");
+const validateUserId = require("../validators/userid");
 
 router
   .route("/")
@@ -31,5 +33,8 @@ router
   .get(validateAppointmentId, validate, getThisAppointment)
   .patch(validateAppointmentId, validate, updateThisAppointment)
   .delete(validateAppointmentId, validate, deleteThisAppointment);
+router
+  .route("/user/:id")
+  .get(validateUserId, validatePagination, validate, getAllAppointmentsByUserId);
 
 module.exports = router;

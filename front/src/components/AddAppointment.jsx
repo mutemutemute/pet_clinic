@@ -18,7 +18,7 @@ const AddAppointment = () => {
 
   const onSubmit = async (formdata) => {
     try {
-      const { data: response } = await axios.post(
+      const { data: response }  = await axios.post(
         `${API_URL}/appointments`,
         formdata,
         { withCredentials: true }

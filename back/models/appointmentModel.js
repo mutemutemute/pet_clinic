@@ -31,6 +31,30 @@ exports.getAppointmentById = async (id) => {
   return appointment;
 };
 
+exports.getAppointmentsByUserId = async (id, limit, offset) => {
+  const appointments = await sql`
+      SELECT appointments.* 
+      FROM appointments
+      WHERE appointments.user_id = ${id}
+      ORDER BY appointments.id
+      ${
+        !isNaN(limit) && !isNaN(offset)
+          ? sql`LIMIT ${limit} OFFSET ${offset}`
+          : sql``
+      } `
+      ;
+  return appointments;
+}
+
+exports.getUserWithAppointments = async (id) => {
+  const [appointment] = await sql`
+      SELECT appointments.*
+      FROM appointments
+      WHERE appointments.user_id = ${id}
+      `;
+  return appointment;
+};
+
 exports.updateAppointment = async (id, updatedAppointment) => {
   const [appointment] = await sql`
       UPDATE appointments

@@ -5,7 +5,8 @@ const {
   deleteAppointment,
   filterAppointments,
   searchAppointments,
-  getAppointmentById
+  getAppointmentById,
+  getAppointmentsByUserId,
 } = require("../models/appointmentModel");
 
 exports.createNewAppointment = async (req, res, next) => {
@@ -45,6 +46,25 @@ exports.getAllAppointments = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.getAllAppointmentsByUserId = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    let { page, limit } = req.query;
+
+    page = parseInt(page);
+    limit = parseInt(limit);
+
+    const offset = (page - 1) * limit;
+    const appointments = await getAppointmentsByUserId(id, limit, offset);
+    res.status(200).json({
+      status: "success",
+      data: appointments,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
 
 exports.updateThisAppointment = async (req, res, next) => {
   const id = req.params.id;

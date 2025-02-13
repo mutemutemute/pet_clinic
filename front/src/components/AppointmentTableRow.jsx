@@ -6,7 +6,7 @@ import axios from "axios";
 const API_URL = import.meta.env.VITE_API_URL;
 
 const AppointmentTableRow = ({ appointment }) => {
-  const { id, pet_name, pet_owner, appointment_date, appointment_time, notes } =
+  const { id, pet_name, pet_owner, appointment_date, appointment_time, notes, status } =
     appointment;
   const { setError, setAppointments } = useContext(AppointmentContext);
 
@@ -17,7 +17,9 @@ const AppointmentTableRow = ({ appointment }) => {
     })
     .replace(" ", "-");
 
-  const [hour, minute] = appointment_time.split(":");
+    const [hour, minute] = appointment_time
+    ? appointment_time.split(":")
+    : ["00", "00"];
   const time = new Date(`1970-01-01T${hour}:${minute}:00`)
     .toLocaleTimeString("en-US", {
       hour: "2-digit",
@@ -54,17 +56,19 @@ const AppointmentTableRow = ({ appointment }) => {
         <button onClick={handleDelete}>Delete</button>
       </div>
 
-      <div className="text-center text-sm">
+      <div className="text-center text-sm mr-5">
         <p className="text-[#431592]">{pet_name}</p>
         <p className="text-gray-600">Owner: {pet_owner}</p>
         <p className="text-gray-500">{notes}</p>
       </div>
 
       <div className="text-right">
-        <p>
+        <p className="text-sm mb-2">
           {date} {time}
         </p>
+        <button className="btn bg-[#431592] text-white">{status}</button>
       </div>
+      
     </div>
   );
 };
