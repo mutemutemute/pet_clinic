@@ -1,5 +1,5 @@
 const { body } = require("express-validator");
-
+const validStatuses = ["Pending", "Comfirmed", "Closed"];
 const validateNewAppointment = [
   body("pet_name")
     .trim()
@@ -42,6 +42,14 @@ const validateNewAppointment = [
     .withMessage("Notes must be a string")
     .isLength({ min: 3, max: 500 })
     .withMessage("Notes must be between 3 and 500 characters"),
+
+  body("status")
+    .trim()
+    .optional()
+    .isString()
+    .withMessage("Status must be a string")
+    .isIn(validStatuses)
+    .withMessage(`Status must be one of: ${validStatuses.join(", ")}`),
 ];
 
 module.exports = validateNewAppointment;

@@ -1,8 +1,10 @@
 const { sql } = require("../dbConnection");
 
 exports.createAppointment = async (newAppointment) => {
+  
+  
   const [appointment] = await sql`
-      INSERT INTO appointments ${sql(newAppointment, "pet_name", "pet_owner", "appointment_date", "appointment_time", "notes")}
+      INSERT INTO appointments ${sql(newAppointment, "user_id","pet_name", "pet_owner","status","rating", "appointment_date", "appointment_time", "notes")}
       RETURNING *;
       `;
   return appointment;

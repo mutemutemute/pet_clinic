@@ -9,11 +9,13 @@ const {
 } = require("../models/appointmentModel");
 
 exports.createNewAppointment = async (req, res, next) => {
-  const newAppointment = req.body;
-
+  // const newAppointment = req.body;
+  // newAppointment.status = "Pending";
+  // newAppointment.rating = null;
+  const newAppointment ={...req.body, status: "Pending", rating: null, user_id: req.user.id};
   try {
     const appointment = await createAppointment(newAppointment);
-    appointment.id = undefined;
+    
     res.status(201).json({
       status: "success",
       data: appointment,

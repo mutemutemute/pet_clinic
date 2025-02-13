@@ -14,10 +14,11 @@ const validatePagination = require("../validators/pagination");
 const validateNewAppointment = require("../validators/newappointment");
 const validateAppointmentId = require("../validators/appointmentid");
 const validateFilter = require("../validators/filter");
+const {protect} = require("../controllers/authController");
 
 router
   .route("/")
-  .post(validateNewAppointment, validate, createNewAppointment)
+  .post(protect, validateNewAppointment, validate, createNewAppointment)
   .get(validatePagination, validate, getAllAppointments);
 router
   .route("/filter")
