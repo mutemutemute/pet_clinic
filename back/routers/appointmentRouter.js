@@ -34,7 +34,7 @@ router
 router
   .route("/:id")
   .get(validateAppointmentId, validate, getThisAppointment)
-  .patch(validateAppointmentId, validate, updateThisAppointment)
+  .patch(protect, validateAppointmentId, validate, updateThisAppointment)
   .delete(validateAppointmentId, validate, deleteThisAppointment);
 router
   .route("/user/:id")

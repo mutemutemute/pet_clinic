@@ -52,15 +52,27 @@ exports.getUserWithAppointments = async (id) => {
   return appointment;
 };
 
-exports.updateAppointment = async (id, updatedAppointment) => {
-  const [appointment] = await sql`
-      UPDATE appointments
-      SET ${sql(updatedAppointment, "pet_name", "pet_owner", "appointment_date", "appointment_time", "notes")}
-      WHERE appointments.id = ${id}
-      RETURNING *;
-      `;
-  return appointment;
+exports.updateAppointment = async (updatedAppointment) => {
+  // const [appointment] = await sql`
+  //     UPDATE appointments
+  //     SET ${sql(updatedAppointment, "pet_name", "pet_owner", "appointment_date", "appointment_time", "notes")}
+  //     WHERE appointments.id = ${id}
+  //     RETURNING *;
+  //     `;
+  // return appointment;
+  
+  const columns = Object.keys(updatedAppointment);
+    const appointment = await sql`
+        UPDATE appointments
+        SET ${
+            sql(updatedAppointment, columns)
+          }
+        WHERE id = ${updatedAppointment.id} AND user_id = ${updatedAppointment.user_id}
+        RETURNING *;
+    `;
+    return appointment[0];
 };
+
 
 exports.deleteAppointment = async (id) => {
   const [appointment] = await sql`
@@ -140,8 +152,6 @@ exports.searchAppointments = async (pet_name, limit, offset) => {
 };
 
 exports.searchUserAppointments = async (id, pet_name, limit, offset) => {
-  console.log(pet_name);
-  
   const petNameFilter = pet_name ? `%${pet_name}%` : "%";
   const appointments = await sql`
       SELECT appointments.*

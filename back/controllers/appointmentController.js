@@ -74,12 +74,13 @@ exports.getAllAppointmentsByUserId = async (req, res, next) => {
 };
 
 exports.updateThisAppointment = async (req, res, next) => {
-  const id = req.params.id;
-  const updatedAppointment = req.body;
+  const { id } = req.params;
+  const {id:user_id} = req.user;
 
   try {
-    const appointment = await updateAppointment(id, updatedAppointment);
-
+    const updatedData = { ...req.body, id, user_id }; 
+    const appointment = await updateAppointment(updatedData);
+    
     res.status(200).json({
       status: "success",
       data: appointment,

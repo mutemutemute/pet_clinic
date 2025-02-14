@@ -8,7 +8,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 const AddAppointment = () => {
   const { setAppointments, error, setError, setShowForm } =
     useContext(AppointmentContext);
-    const { user } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   const {
     register,
@@ -19,18 +19,20 @@ const AddAppointment = () => {
 
   const onSubmit = async (formdata) => {
     try {
-
       const payload = {
         ...formdata,
-        user_id: user.id, 
-        
+        status: "Pending",
+        rating: null,
+        user_id: user.id,
       };
-      const { data: response }  = await axios.post(
-        `${API_URL}/appointments`,
-        payload,
-        { withCredentials: true }
-      );
-      setAppointments((prev) => [...prev, response]);
+
+      const response = await axios.post(`${API_URL}/appointments`, payload, {
+        withCredentials: true,
+      });
+
+      const newAppointment = response.data?.data || response.data || response;
+
+      setAppointments((prev) => [...prev, newAppointment]);
       reset();
       window.alert("Appointment added successfully!");
       setShowForm(false);
@@ -38,14 +40,12 @@ const AddAppointment = () => {
       setError(error.message);
     }
   };
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4 flex justify-center items-center gap-3">
-          <label
-            htmlFor="pet_name"
-            className="text-sm "
-          >
+          <label htmlFor="pet_name" className="text-sm ">
             Pet Name
           </label>
           <input
@@ -62,10 +62,7 @@ const AddAppointment = () => {
         </div>
 
         <div className="mb-4 flex justify-center items-center gap-2">
-          <label
-            htmlFor="pet_owner"
-            className="text-sm "
-          >
+          <label htmlFor="pet_owner" className="text-sm ">
             Pet Owner
           </label>
           <input
@@ -81,57 +78,47 @@ const AddAppointment = () => {
           )}
         </div>
 
+        <div className="flex flex-col md:grid grid-cols-2 ">
+          <div className="mb-4 flex justify-center items-center ml-9 md:mx-9 gap-2">
+            <label htmlFor="appointment_date" className="block text-sm">
+              Date
+            </label>
+            <input
+              {...register("appointment_date", {
+                required: "Date is required",
+              })}
+              type="date"
+              className="mt-1 p-2 rounded-md w-full input input-bordered"
+            />
+            {errors.appointment_date && (
+              <p className="text-red-500 text-sm">
+                {errors.appointment_date.message}
+              </p>
+            )}
+          </div>
 
-<div className="flex flex-col md:grid grid-cols-2 ">
-        <div className="mb-4 flex justify-center items-center ml-9 md:mx-9 gap-2">
-          <label
-            htmlFor="appointment_date"
-            className="block text-sm"
-          >
-            Date
-          </label>
-          <input
-            {...register("appointment_date", {
-              required: "Date is required",
-            })}
-            type="date"
-            className="mt-1 p-2 rounded-md w-full input input-bordered"
-          />
-          {errors.appointment_date && (
-            <p className="text-red-500 text-sm">
-              {errors.appointment_date.message}
-            </p>
-          )}
-        </div>
-
-        <div className="mb-4 flex justify-center items-center gap-2 ml-9 md:ml-16 ">
-          <label
-            htmlFor="appointment_time"
-            className="text-sm"
-          >
-            Time
-          </label>
-          <input
-            {...register("appointment_time", {
-              required: "Time is required",
-              min: 1,
-            })}
-            type="time"
-            className="mt-1 p-2 input input-bordered rounded-md w-full "
-          />
-          {errors.appointment_time && (
-            <p className="text-red-500 text-sm">
-              {errors.appointment_time.message}
-            </p>
-          )}
-        </div>
+          <div className="mb-4 flex justify-center items-center gap-2 ml-9 md:ml-16 ">
+            <label htmlFor="appointment_time" className="text-sm">
+              Time
+            </label>
+            <input
+              {...register("appointment_time", {
+                required: "Time is required",
+                min: 1,
+              })}
+              type="time"
+              className="mt-1 p-2 input input-bordered rounded-md w-full "
+            />
+            {errors.appointment_time && (
+              <p className="text-red-500 text-sm">
+                {errors.appointment_time.message}
+              </p>
+            )}
+          </div>
         </div>
 
         <div className="mb-4 flex justify-center gap-2 ">
-          <label
-            htmlFor="notes"
-            className="block text-sm mt-2"
-          >
+          <label htmlFor="notes" className="block text-sm mt-2">
             Apt. Notes
           </label>
           <textarea
