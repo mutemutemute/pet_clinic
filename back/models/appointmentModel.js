@@ -52,27 +52,30 @@ exports.getUserWithAppointments = async (id) => {
   return appointment;
 };
 
-exports.updateAppointment = async (updatedAppointment) => {
-  // const [appointment] = await sql`
-  //     UPDATE appointments
-  //     SET ${sql(updatedAppointment, "pet_name", "pet_owner", "appointment_date", "appointment_time", "notes")}
-  //     WHERE appointments.id = ${id}
-  //     RETURNING *;
-  //     `;
-  // return appointment;
-  
+exports.updateAppointment = async (updatedAppointment, isAdmin = false) => {
   const columns = Object.keys(updatedAppointment);
-    const appointment = await sql`
-        UPDATE appointments
-        SET ${
-            sql(updatedAppointment, columns)
-          }
-        WHERE id = ${updatedAppointment.id} AND user_id = ${updatedAppointment.user_id}
-        RETURNING *;
-    `;
-    return appointment[0];
-};
 
+  let query;
+
+  if (isAdmin) {
+    query = sql`
+      UPDATE appointments
+      SET ${sql(updatedAppointment, ...columns)}
+      WHERE id = ${updatedAppointment.id}
+      RETURNING *;
+    `;
+  } else {
+    query = sql`
+      UPDATE appointments
+      SET ${sql(updatedAppointment, ...columns)}
+      WHERE id = ${updatedAppointment.id} AND user_id = ${updatedAppointment.user_id}
+      RETURNING *;
+    `;
+  }
+
+  const [appointment] = await query;
+  return appointment;
+};
 
 exports.deleteAppointment = async (id) => {
   const [appointment] = await sql`

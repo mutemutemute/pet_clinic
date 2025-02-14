@@ -1,15 +1,21 @@
 import { Link } from "react-router";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import AppointmentContext from "../contexts/AppointmentContext";
 import axios from "axios";
 import Rating from "./Rating";
+import UserContext from "../contexts/UserContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
+
+const validStatuses = ["Pending", "Confirmed", "Closed"];
 
 const AppointmentTableRow = ({ appointment }) => {
   const { id, pet_name, pet_owner, appointment_date, appointment_time, notes, status } =
     appointment;
   const { setError, setAppointments } = useContext(AppointmentContext);
+  const { user } = useContext(UserContext);
+
+  const [selectedStatus, setSelectedStatus] = useState(status);
 
   const date = new Date(appointment_date)
     .toLocaleDateString("en-US", {
@@ -50,6 +56,29 @@ const AppointmentTableRow = ({ appointment }) => {
     }
   };
 
+  const handleStatusChange = async (newStatus) => {
+    setSelectedStatus(newStatus); 
+
+    try {
+      const response = await axios.patch(
+        `${API_URL}/appointments/${id}`,
+        { status: newStatus },
+        { withCredentials: true }
+      );
+
+      if (response.status === 200) {
+        setAppointments((prev) =>
+          prev.map((appointment) =>
+            appointment.id === id ? { ...appointment, status: newStatus } : appointment
+          )
+        );
+      }
+    } catch (error) {
+      setError("Could not update status. Please try again.");
+      
+    }
+  };
+
   return (
     <div className="grid grid-cols-3 border-b border-gray-300 p-4 w-full">
       <div className="flex flex-col items-start space-y-1">
@@ -69,7 +98,22 @@ const AppointmentTableRow = ({ appointment }) => {
           {date} {time}
         </p>
         <div><Rating id={id} /></div>
-        <button className="btn bg-[#431592] text-white">{status}</button>
+        {user?.role === "admin" ? (
+          <select
+            value={selectedStatus}
+            onChange={(e) => handleStatusChange(e.target.value)}
+            className="border px-2 py-1 rounded bg-white cursor-pointer"
+          >
+            {validStatuses.map((statusOption) => (
+              <option key={statusOption} value={statusOption}>
+                {statusOption}
+              </option>
+            ))}
+          </select>
+        ) : (
+          
+          <button className="btn bg-[#431592] text-white">{status}</button>
+        )}
         
       </div>
       

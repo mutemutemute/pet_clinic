@@ -12,9 +12,6 @@ const {
 } = require("../models/appointmentModel");
 
 exports.createNewAppointment = async (req, res, next) => {
-  // const newAppointment = req.body;
-  // newAppointment.status = "Pending";
-  // newAppointment.rating = null;
   const newAppointment = {
     ...req.body,
     status: "Pending",
@@ -43,7 +40,6 @@ exports.getAllAppointments = async (req, res, next) => {
     const offset = (page - 1) * limit;
 
     const appointments = await getAppointments(limit, offset);
-    // const appointmentsWithoutId = appointments.map(({ id, ...rest }) => rest);
 
     res.status(200).json({
       status: "success",
@@ -75,12 +71,17 @@ exports.getAllAppointmentsByUserId = async (req, res, next) => {
 
 exports.updateThisAppointment = async (req, res, next) => {
   const { id } = req.params;
-  const {id:user_id} = req.user;
+  const { id: user_id, role } = req.user;
 
   try {
-    const updatedData = { ...req.body, id, user_id }; 
-    const appointment = await updateAppointment(updatedData);
-    
+    const isAdmin = role === "admin";
+
+    const updatedData = isAdmin
+      ? { ...req.body, id }
+      : { ...req.body, id, user_id };
+
+    const appointment = await updateAppointment(updatedData, isAdmin);
+
     res.status(200).json({
       status: "success",
       data: appointment,
