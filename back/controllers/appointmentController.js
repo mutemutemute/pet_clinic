@@ -7,16 +7,23 @@ const {
   searchAppointments,
   getAppointmentById,
   getAppointmentsByUserId,
+  filterUserAppointments,
+  searchUserAppointments,
 } = require("../models/appointmentModel");
 
 exports.createNewAppointment = async (req, res, next) => {
   // const newAppointment = req.body;
   // newAppointment.status = "Pending";
   // newAppointment.rating = null;
-  const newAppointment ={...req.body, status: "Pending", rating: null, user_id: req.user.id};
+  const newAppointment = {
+    ...req.body,
+    status: "Pending",
+    rating: null,
+    user_id: req.user.id,
+  };
   try {
     const appointment = await createAppointment(newAppointment);
-    
+
     res.status(201).json({
       status: "success",
       data: appointment,
@@ -64,7 +71,7 @@ exports.getAllAppointmentsByUserId = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};
 
 exports.updateThisAppointment = async (req, res, next) => {
   const id = req.params.id;
@@ -116,7 +123,34 @@ exports.filterAllAppointments = async (req, res, next) => {
   }
 };
 
-exports.filterAllAppointmentsByPetName = async (req, res, next) => {
+exports.filterUserAppointments = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    let { page, limit, sortColumn, sortOrder } = req.query;
+
+    page = page ? parseInt(page) : null;
+    limit = limit ? parseInt(limit) : null;
+    const offset = page && limit ? (page - 1) * limit : null;
+
+    const appointments = await filterUserAppointments(
+      id,
+      limit,
+      offset,
+      sortColumn,
+      sortOrder
+    );
+
+    res.status(200).json({
+      status: "success",
+      data: appointments,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.searchAllAppointmentsByPetName = async (req, res, next) => {
   try {
     let { pet_name, page, limit } = req.query;
 
@@ -135,6 +169,32 @@ exports.filterAllAppointmentsByPetName = async (req, res, next) => {
   }
 };
 
+exports.searchUserAppointmentsByPetName = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    let { pet_name, page, limit } = req.query;
+    console.log(req.query);
+
+    page = page ? parseInt(page) : null;
+    limit = limit ? parseInt(limit) : null;
+    const offset = page && limit ? (page - 1) * limit : null;
+
+    const appointments = await searchUserAppointments(
+      id,
+      pet_name,
+      limit,
+      offset
+    );
+
+    res.status(200).json({
+      status: "success",
+      data: appointments,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 exports.getThisAppointment = async (req, res, next) => {
   const { id } = req.params;
   try {

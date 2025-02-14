@@ -12,9 +12,9 @@ const AppointmentTable = () => {
     <div className="flex flex-col justify-center items-center w-full">
       <div className="h-100 overflow-y-auto w-full">
         {appointments ? (
-          appointments.map((appointment) => (
+          appointments.map((appointment, index) => (
             <AppointmentTableRow
-              key={appointment.id}
+              key={appointment.id ? `appointment-${appointment.id}` : `index-${index}`}
               appointment={appointment}
             />
           ))

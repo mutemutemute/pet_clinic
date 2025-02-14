@@ -5,9 +5,11 @@ const {
   updateThisAppointment,
   deleteThisAppointment,
   filterAllAppointments,
-  filterAllAppointmentsByPetName,
+  searchAllAppointmentsByPetName,
   getThisAppointment,
   getAllAppointmentsByUserId,
+  filterUserAppointments,
+  searchUserAppointmentsByPetName
 } = require("../controllers/appointmentController");
 const validate = require("../validators/validate");
 const router = express.Router();
@@ -17,6 +19,7 @@ const validateAppointmentId = require("../validators/appointmentid");
 const validateFilter = require("../validators/filter");
 const { protect } = require("../controllers/authController");
 const validateUserId = require("../validators/userid");
+const validateSearch = require("../validators/search");
 
 router
   .route("/")
@@ -27,7 +30,7 @@ router
   .get(validateFilter, validatePagination, validate, filterAllAppointments);
 router
   .route("/search")
-  .get(validatePagination, validate, filterAllAppointmentsByPetName);
+  .get(validateSearch, validatePagination, validate, searchAllAppointmentsByPetName);
 router
   .route("/:id")
   .get(validateAppointmentId, validate, getThisAppointment)
@@ -36,5 +39,11 @@ router
 router
   .route("/user/:id")
   .get(validateUserId, validatePagination, validate, getAllAppointmentsByUserId);
+router
+  .route("/user/:id/filter")
+  .get(validateUserId, validateFilter, validatePagination, validate, filterUserAppointments);
+router
+  .route("/user/:id/search")
+  .get(validateUserId, validateSearch, validatePagination, validate, searchUserAppointmentsByPetName);
 
 module.exports = router;

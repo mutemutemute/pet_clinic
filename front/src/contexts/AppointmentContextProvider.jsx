@@ -1,8 +1,13 @@
-import { useState, useEffect } from "react";
+import {useContext, useState, useEffect } from "react";
 import AppointmentContext from "./AppointmentContext";
 import fetchAppointments from "../helpers/fetchAppointments";
+import fetchAppointmentsById from "../helpers/fetchAppointmentsById";
+import UserContext from "./UserContext";
+
+
 
 function AppointmentContextProvider({ children }) {
+  const { user } = useContext(UserContext);
   const [appointments, setAppointments] = useState([]);
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -12,17 +17,29 @@ function AppointmentContextProvider({ children }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchAppointments(searchTerm, sortColumn, sortOrder);
-      if (data.error) {
+      
+      if(!user || !user.role || !user.id) {
+     
+        return;
+      } 
+      let data;
+      console.log(user.role)
+      if (user.role === 'admin') {
+        data = await fetchAppointments(searchTerm, sortColumn, sortOrder);
+      } else if (user.role === 'user') {
+        data = await fetchAppointmentsById(user.id, searchTerm, sortColumn, sortOrder);
+      }
+  
+      if (data?.error) {
         setError(data.error);
       } else {
         setAppointments(data.data);
-        console.log(data.data);
+        
       }
     };
-
+  
     fetchData();
-  }, [sortColumn, sortOrder, searchTerm]); 
+  }, [user, sortColumn, sortOrder, searchTerm])
 
   return (
     <AppointmentContext.Provider

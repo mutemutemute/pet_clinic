@@ -1,6 +1,7 @@
 import UserContext from "./UserContext";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { data } from "react-router";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const UserContextProvider = ({ children }) => {
@@ -10,9 +11,10 @@ const UserContextProvider = ({ children }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`${API_URL}/users/me`, {
+        const { data: response } = await axios.get(`${API_URL}/users/me`, {
           withCredentials: true,
         });
+
         setUser(response.data);
       } catch (error) {
         console.log(error);

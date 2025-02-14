@@ -2,12 +2,13 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useContext } from "react";
 import AppointmentContext from "../contexts/AppointmentContext";
-
+import UserContext from "../contexts/UserContext";
 const API_URL = import.meta.env.VITE_API_URL;
 
 const AddAppointment = () => {
   const { setAppointments, error, setError, setShowForm } =
     useContext(AppointmentContext);
+    const { user } = useContext(UserContext);
 
   const {
     register,
@@ -18,9 +19,15 @@ const AddAppointment = () => {
 
   const onSubmit = async (formdata) => {
     try {
+
+      const payload = {
+        ...formdata,
+        user_id: user.id, 
+        
+      };
       const { data: response }  = await axios.post(
         `${API_URL}/appointments`,
-        formdata,
+        payload,
         { withCredentials: true }
       );
       setAppointments((prev) => [...prev, response]);
