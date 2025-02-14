@@ -19,7 +19,7 @@ function AppointmentContextProvider({ children }) {
     const fetchData = async () => {
       
       if(!user || !user.role || !user.id) {
-     
+        
         return;
       } 
       let data;
@@ -37,7 +37,7 @@ function AppointmentContextProvider({ children }) {
         
       }
     };
-  
+    console.log("User updated:", user);
     fetchData();
   }, [user, sortColumn, sortOrder, searchTerm])
 

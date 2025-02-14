@@ -1,7 +1,8 @@
 import UserContext from "./UserContext";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { data } from "react-router";
+import fetchAppointments from "../helpers/fetchAppointments";
+import fetchAppointmentsById from "../helpers/fetchAppointmentsById";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const UserContextProvider = ({ children }) => {
@@ -22,6 +23,8 @@ const UserContextProvider = ({ children }) => {
     };
     fetchUser();
   }, []);
+
+  
   return (
     <UserContext.Provider value={{ user, setUser, error, setError }}>
       {children}

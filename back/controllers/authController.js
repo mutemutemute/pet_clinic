@@ -57,7 +57,7 @@ exports.login = async (req, res, next) => {
     sendCookie(token, res);
 
     user.password = undefined;
-    user.id = undefined;
+    // user.id = undefined;
 
     res.status(200).json({
       status: "success",
