@@ -4,47 +4,20 @@ import UserContext from "../contexts/UserContext";
 import AppointmentContext from "../contexts/AppointmentContext";
 import { useContext, useEffect } from "react";
 import { useNavigate, Link } from "react-router";
-import fetchAppointments from "../helpers/fetchAppointments";
-import fetchAppointmentsById from "../helpers/fetchAppointmentsById";
-import { use } from "react";
+import fetchData from "../helpers/fetchData";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 function LoginForm() {
   const { user, setUser, error, setError } = useContext(UserContext);
-  const {
-    setAppointments,
-    sortColumn,
-    sortOrder,
-    searchTerm,
-  } = useContext(AppointmentContext);
+  const { setAppointments, sortColumn, sortOrder, searchTerm } =
+    useContext(AppointmentContext);
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  const fetchData = async () => {
-    let data;
-
-    if (user.role === "admin") {
-      data = await fetchAppointments(searchTerm, sortColumn, sortOrder);
-    } else if (user.role === "user") {
-      data = await fetchAppointmentsById(
-        user.id,
-        searchTerm,
-        sortColumn,
-        sortOrder
-      );
-    }
-
-    if (data?.error) {
-      setError(data.error);
-    } else {
-      return data.data;
-    }
-  };
 
   const onSubmit = async (formdata) => {
     try {
@@ -77,12 +50,18 @@ function LoginForm() {
   useEffect(() => {
     const setAllAppointments = async () => {
       if (user) {
-        setAppointments(await fetchData());
+        const appointments = await fetchData({
+          user,
+          searchTerm,
+          sortColumn,
+          sortOrder,
+        });
+        setAppointments(appointments);
       }
     };
 
     setAllAppointments();
-  }, [user]);
+  }, [user, searchTerm, sortColumn, sortOrder]);
 
   return (
     <div className="flex justify-center items-center h-screen">
