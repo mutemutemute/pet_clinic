@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { useContext } from "react";
 import AppointmentContext from "../contexts/AppointmentContext";
 import axios from "axios";
+import Rating from "./Rating";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -62,11 +63,14 @@ const AppointmentTableRow = ({ appointment }) => {
         <p className="text-gray-500">{notes}</p>
       </div>
 
+
       <div className="text-right">
-        <p className="text-sm mb-2">
+        <p className="text-sm ">
           {date} {time}
         </p>
+        <div><Rating id={id} /></div>
         <button className="btn bg-[#431592] text-white">{status}</button>
+        
       </div>
       
     </div>

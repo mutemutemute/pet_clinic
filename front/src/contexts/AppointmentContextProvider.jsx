@@ -23,7 +23,7 @@ function AppointmentContextProvider({ children }) {
         return;
       } 
       let data;
-      console.log(user.role)
+      
       if (user.role === 'admin') {
         data = await fetchAppointments(searchTerm, sortColumn, sortOrder);
       } else if (user.role === 'user') {
@@ -37,10 +37,11 @@ function AppointmentContextProvider({ children }) {
         
       }
     };
-    console.log("User updated:", user);
+    
     fetchData();
   }, [user, sortColumn, sortOrder, searchTerm])
 
+  
   return (
     <AppointmentContext.Provider
       value={{

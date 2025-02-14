@@ -5,16 +5,17 @@ import AppointmentTableRow from "./AppointmentTableRow";
 const AppointmentTable = () => {
   const { appointments } = useContext(AppointmentContext);
 
-  
-  
-
   return (
     <div className="flex flex-col justify-center items-center w-full">
       <div className="h-100 overflow-y-auto w-full">
         {appointments ? (
           appointments.map((appointment, index) => (
             <AppointmentTableRow
-              key={appointment.id ? `appointment-${appointment.id}` : `index-${index}`}
+              key={
+                appointment.id
+                  ? `appointment-${appointment.id}`
+                  : `index-${index}`
+              }
               appointment={appointment}
             />
           ))

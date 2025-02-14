@@ -1,13 +1,47 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FaStar } from "react-icons/fa";
+import AppointmentContext from "../contexts/AppointmentContext";
+import axios from "axios";
 
-function Rating({ initialRating = 0, onRate }) {
+const API_URL = import.meta.env.VITE_API_URL;
+
+function Rating({ id }) {
+  const { appointments, setAppointments, setError } =
+    useContext(AppointmentContext);
+
+  const appointment = appointments.find((a) => a.id === id);
+  if (!appointment) return null;
+  const { rating: initialRating, status } = appointment;
+
+  if (status !== "Closed") {
+    return null;
+  }
+
   const [rating, setRating] = useState(initialRating);
   const [hover, setHover] = useState(0);
 
-  const handleClick = (newRating) => {
-    setRating(newRating);
-    onRate(newRating); 
+  const handleRatingUpdate = async (newRating) => {
+    try {
+      const response = await axios.patch(
+        `${API_URL}/appointments/${id}`,
+        { rating: newRating },
+        { withCredentials: true }
+      );
+
+      if (response.status === 200) {
+        setRating(newRating);
+
+        setAppointments((prev) =>
+          prev.map((appointment) =>
+            appointment.id === id
+              ? { ...appointment, rating: newRating }
+              : appointment
+          )
+        );
+      }
+    } catch (error) {
+      setError("Could not update rating. Please try again.");
+    }
   };
 
   return (
@@ -15,8 +49,8 @@ function Rating({ initialRating = 0, onRate }) {
       {[1, 2, 3, 4, 5].map((star) => (
         <FaStar
           key={star}
-          size={30}
-          onClick={() => handleClick(star)}
+          size={25}
+          onClick={() => handleRatingUpdate(star)}
           onMouseEnter={() => setHover(star)}
           onMouseLeave={() => setHover(0)}
           color={(hover || rating) >= star ? "#ffc107" : "#e4e5e9"}
