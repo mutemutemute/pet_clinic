@@ -46,7 +46,7 @@ const AppointmentTableRow = ({ appointment }) => {
 
   const handleDelete = async () => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete this invoice?"
+      "Are you sure you want to delete this appointment?"
     );
 
     if (confirmed) {
