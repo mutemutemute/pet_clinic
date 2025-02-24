@@ -49,17 +49,18 @@ const AppointmentTableRow = ({ appointment }) => {
       "Are you sure you want to delete this appointment?"
     );
 
-    if (confirmed) {
-      setAppointments((prev) => ({
-        ...prev,
-        list: prev.list.filter((appointment) => appointment.id !== id),
-      }));
-    }
+    if (!confirmed) return;
 
     try {
       await axios.delete(`${API_URL}/appointments/${id}`, {
         withCredentials: true,
       });
+
+      setAppointments((prev) => ({
+        ...prev,
+        list: prev.list.filter((appointment) => appointment.id !== id),
+      }));
+
       window.alert("Appointment deleted successfully!");
       update();
     } catch (error) {
